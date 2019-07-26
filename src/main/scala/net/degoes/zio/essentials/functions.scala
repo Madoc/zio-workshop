@@ -4,6 +4,7 @@ package net.degoes.zio
 package essentials
 
 import java.time.LocalDate
+import java.util.Random
 
 /**
  * Functions are total, deterministic, and free of side effects.
@@ -16,23 +17,23 @@ object functions {
   /**
    * Partial => Total
    */
-  def parseInt1(s: String): Int   = s.toInt
-  def parseInt2( /* ??? */ ): ??? = ???
+  def parseInt1(s: String): Int         = s.toInt
+  def parseInt2(s: String): Option[Int] = try { Some(s.toInt) } catch { case _: Throwable => None }
 
-  def divide1(a: Int, b: Int): Int = a / b
-  def divide2( /* ??? */ ): ???    = ???
+  def divide1(a: Int, b: Int): Int         = a / b
+  def divide2(a: Int, b: Int): Option[Int] = try { Some(a / b) } catch { case _: ArithmeticException => None }
 
-  def head1[A](l: Seq[A]): A     = l.head
-  def head2[A]( /* ??? */ ): ??? = ???
+  def head1[A](l: Seq[A]): A         = l.head
+  def head2[A](l: Seq[A]): Option[A] = l.headOption
 
-  def secondChar1(str: String): Char = str.charAt(2)
-  def secondChar2( /* ??? */ ): Char = ???
+  def secondChar1(str: String): Char         = str.charAt(2)
+  def secondChar2(str: String): Option[Char] = str.lift(1)
 
   /**
    * Non-deterministic => Deterministic
    */
-  def increment1: Int              = scala.util.Random.nextInt(0) + 1
-  def increment2( /* ??? */ ): ??? = ???
+  def increment1: Int            = scala.util.Random.nextInt(0) + 1
+  def increment2(seed: Int): Int = scala.util.Random.javaRandomToRandom(new Random(seed)).nextInt(0) + 1
 
   def nextDay1: LocalDate        = LocalDate.now.plusDays(1)
   def nextDay2( /* ??? */ ): ??? = ???
